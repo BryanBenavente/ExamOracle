@@ -1,0 +1,13 @@
+CREATE OR REPLACE FORCE VIEW "LOCAL".vw_cantrenovacion (numvivi,nominq,renv) AS
+select
+    VV.NUMVIVI, IQ.NOMINQ,
+    concat(count(AL2.CODRENV), ' renovacion(es)') RENV
+from ALQUILER AL
+    LEFT JOIN ALQUILER AL2
+        ON AL.CODALQU = AL2.CODRENV
+    INNER JOIN VIVIENDA VV
+        ON AL.CODVIVI = VV.CODVIVI
+    INNER JOIN INQUILINO IQ
+        ON IQ.CODINQ = AL.CODINQ
+group by VV.NUMVIVI, IQ.NOMINQ
+ORDER BY VV.NUMVIVI;

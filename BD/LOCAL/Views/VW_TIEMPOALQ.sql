@@ -1,0 +1,16 @@
+CREATE OR REPLACE FORCE VIEW "LOCAL".vw_tiempoalq (numvivi,nominq,fecini,fecfin,alq) AS
+SELECT 
+    VV.NUMVIVI, IQ.NOMINQ,
+    AL.FECINI, AL.FECFIN,
+    CASE
+        WHEN AL.FECFIN <> '01/12/75' 
+        THEN 
+            CONCAT(TO_CHAR(EXTRACT(YEAR FROM AL.FECFIN) - EXTRACT(YEAR FROM AL.FECINI)), ' año(s) ha transcurrido')
+        ELSE 'No tiene fecha fin'
+    END ALQ
+from ALQUILER AL
+    INNER JOIN VIVIENDA VV
+        ON AL.CODVIVI = VV.CODVIVI
+    INNER JOIN INQUILINO IQ
+        ON IQ.CODINQ = AL.CODINQ
+ORDER BY VV.NUMVIVI;
